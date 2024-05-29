@@ -2,27 +2,38 @@ version: '4.30.0'
 services:
   my-sql:
     image: mysql:latest
-    container_name: my-sql
+    ports:
+      - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: nestjs-test
-      MYSQL_USER: root
+      MYSQL_DATABASE: nestjs-test # Database name (optional)
+      MYSQL_USER: mysql
       MYSQL_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
       - ./data/mysql:/var/lib/mysql
+    networks:
+      - networkName
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '--silent'] # Check if the container is healthy
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: pma
-    links:
-      - my-sql
+    image: phpmyadmin:5.2.1
+    container_name: phpmyadmin
     restart: always
     ports:
       - '8080:80'
     environment:
       PMA_HOST: my-sql
-      PMA_USER: root
-      PMA_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: root
       PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    volumes:
-      - ./data/phpmyadmin
+    depends_on:
+      - my-sql
+    networks:
+      - networkName
+networks:
+  networkName:
+    driver: bridge
