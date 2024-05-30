@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import UserEntity from 'src/modules/user/user.entities'
+import UserModule from 'src/modules/user/user.module'
 
 /**
  * Module decorator là một decorator được sử dụng để đánh dấu một class là module.
@@ -23,10 +25,11 @@ import { TypeOrmModule } from '@nestjs/typeorm'
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'test',
-      entities: [],
+      database: 'nestjs-test',
+      entities: [UserEntity],
       synchronize: true
-    })
+    }),
+    UserModule
   ]
 })
 export default class AppModule {}

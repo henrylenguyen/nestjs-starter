@@ -5,8 +5,10 @@
  *
  */
 
+import UserDTO from 'src/modules/user/user.dto'
+
 class UserReponsitory {
-  async create(user: User) {
+  async create(user: UserDTO) {
     // save user to database
   }
 }

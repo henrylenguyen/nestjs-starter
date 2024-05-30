@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import userController from 'src/modules/user/user.controller'
+import UserEntity from 'src/modules/user/user.entities'
 import UserService from 'src/modules/user/user.service'
 
 /**
@@ -14,6 +16,7 @@ import UserService from 'src/modules/user/user.service'
       provide: 'USER_SERVICE',
       useClass: UserService
     }
-  ]
+  ],
+  imports: [TypeOrmModule.forFeature([UserEntity])]
 })
 export default class UserModule {}
